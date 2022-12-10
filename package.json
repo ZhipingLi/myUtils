@@ -1,0 +1,23 @@
+{
+  "name": "zhiping-utils",
+  "version": "1.0.1",
+  "description": "Personal utility library for developing and studying",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZhipingLi/myUtils.git"
+  },
+  "keywords": [
+    "utils"
+  ],
+  "author": "Zhiping Li",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ZhipingLi/myUtils/issues"
+  },
+  "homepage": "https://github.com/ZhipingLi/myUtils#readme",
+  "type": "module"
+}
