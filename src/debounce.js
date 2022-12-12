@@ -1,41 +1,63 @@
-export default function debounce(fn, delay, immediate = false, resultCallback) {
-  // 1.定义一个定时器, 保存上一次的定时器
-  let timer = null
-  let isInvoke = false
+export default function debounce(fn, delay, immediate = true, resultCallback) {
+  let timer = null, isInvoked = false
 
-  // 2.真正执行的函数
   const _debounce = function(...args) {
-    return new Promise((resolve, reject) => {
-      // 取消上一次的定时器
-      if (timer) clearTimeout(timer)
+    if (timer) clearTimeout(timer)
 
-      // 判断是否需要立即执行
-      if (immediate && !isInvoke) {
+    if (immediate && !isInvoked) {
+      const result = fn.apply(this, args)
+      if (resultCallback) resultCallback(result)
+      isInvoked = true
+    } else {
+      timer = setTimeout(() => {
         const result = fn.apply(this, args)
         if (resultCallback) resultCallback(result)
-        resolve(result)
-        isInvoke = true
-      } else {
-        // 延迟执行
-        timer = setTimeout(() => {
-          // 外部传入的真正要执行的函数
-          const result = fn.apply(this, args)
-          if (resultCallback) resultCallback(result)
-          resolve(result)
-          isInvoke = false
-          timer = null
-        }, delay)
-      }
-    })
+        isInvoked = false
+      }, delay)
+    }
   }
 
-  // 取消功能
   _debounce.cancel = function() {
     if (timer) clearTimeout(timer)
-    timer = null
-    isInvoke = false
+    isInvoked = false
   }
 
   return _debounce
 }
 
+export function debounceWithPromise(fn, delay, immediate = true) {
+  let timer = null, isInvoked = false
+
+  const _debounce = function(...args) {
+    return new Promise((resolve, reject) => {
+      if (timer) clearTimeout(timer)
+
+      if (immediate && !isInvoked) {
+        try {
+          const result = fn.apply(this, args)
+          resolve(result)
+        } catch (error) {
+          reject(error)
+        }
+        isInvoked = true
+      } else {
+        timer = setTimeout(() => {
+          try {
+            const result = fn.apply(this, args)
+            resolve(result)
+          } catch (error) {
+            reject(error)
+          }
+          isInvoked = false
+        }, delay)
+      }
+    })
+  }
+
+  _debounce.cancel = function() {
+    if (timer) clearTimeout(timer)
+    isInvoked = false
+  }
+
+  return _debounce
+}

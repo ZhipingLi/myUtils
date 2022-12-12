@@ -1,6 +1,6 @@
 {
   "name": "zhiping-utils",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Personal utility library for developing and studying",
   "main": "index.js",
   "scripts": {
